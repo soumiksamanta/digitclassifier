@@ -10,5 +10,5 @@
 **Tools Used**
 1. Tensorflow
 2. FastAPI
-3. React
+3. React + Tailwind CSS
 4. Docker
