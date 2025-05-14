@@ -1,0 +1,25 @@
+# Ignore node_modules and build directories
+frontend/node_modules
+frontend/build
+
+# Ignore FastAPI virtual environment and unnecessary files
+__pycache__/
+.env
+venv
+.pytest_cache
+.dockerignore
+Dockerfile
+
+
+
+# Ignore the default npm or yarn lock file (you might want to copy this, depending on your setup)
+frontend/package-lock.json
+frontend/yarn.lock
+
+# Ignore IDE files (VSCode, PyCharm, etc.)
+.vscode
+.idea
+
+# Ignore macOS or Linux system files
+.DS_Store
+Thumbs.db
