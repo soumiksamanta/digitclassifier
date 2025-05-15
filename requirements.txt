@@ -2,5 +2,5 @@ fastapi==0.115.12
 numpy==1.26.0
 Pillow==11.2.1
 pydantic==2.11.4
-tensorflow==2.19.0
+tensorflow-cpu==2.19.0
 uvicorn[standard]

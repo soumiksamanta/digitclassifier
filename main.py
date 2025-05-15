@@ -9,10 +9,6 @@ from PIL import Image
 import numpy as np
 import base64
 from io import BytesIO
-import os
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-os.environ["TF_XLA_FLAGS"] = "--tf_xla_auto_jit=0"
 
 model = tf.keras.models.load_model('model/mnist_cnn_model.keras')
 
@@ -38,7 +34,11 @@ async def serve_index():
 class ImageData(BaseModel):
     image: str  # Base64 image string
 
-@app.post("/process")
+class PredictionResult(BaseModel):
+    predicted_number: int
+    score: float
+
+@app.post("/api/predict")
 async def process_image(data: ImageData):
     try:
         header, encoded = data.image.split(",", 1)
@@ -50,7 +50,7 @@ async def process_image(data: ImageData):
         coords = np.argwhere(np_image > 10)  # threshold to ignore black background
 
         if coords.size == 0:
-            raise ValueError("Blackboard")
+            raise ValueError("blackboard")
 
         y_min, x_min = coords.min(axis=0)
         y_max, x_max = coords.max(axis=0)
@@ -70,6 +70,7 @@ async def process_image(data: ImageData):
         img = img.reshape(1, 28, 28, 1)  # Add batch dimension
         prediction = model.predict(img, verbose=0)
         predicted_class = np.argmax(prediction, axis=1)[0]
-        return {"predicted_number": int(predicted_class)}
+        score = round(float(prediction[0, predicted_class]),2)
+        return PredictionResult(predicted_number=predicted_class, score=score)
     except Exception as e:
         return {"error": str(e)}
